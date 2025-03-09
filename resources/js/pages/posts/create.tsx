@@ -1,20 +1,18 @@
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import { BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 
 import { LoaderCircle } from 'lucide-react';
-import { FormEventHandler } from 'react';
+import React, { FormEventHandler } from 'react';
 
 import InputError from '@/components/input-error';
-import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import AuthLayout from '@/layouts/auth-layout';
+import { Textarea } from "@/components/ui/textarea"
 
 type PostForm = {
     title: string;
+    slug: string;
     content: string;
     image: File | null;
 };
@@ -30,6 +28,7 @@ export default function PostCreate() {
 
     const { data, setData, post, processing, errors, reset } = useForm<Required<PostForm>>({
         title: '',
+        slug: '',
         content: '',
         image: null,
     });
@@ -41,7 +40,7 @@ export default function PostCreate() {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Post Create" />
+            <Head title="Post Create"/>
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div
                     className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
@@ -59,7 +58,7 @@ export default function PostCreate() {
                                     </label>
                                     <Input
                                         id="title"
-                                        type="title"
+                                        type="text"
                                         required
                                         autoFocus
                                         tabIndex={1}
@@ -68,7 +67,7 @@ export default function PostCreate() {
                                         onChange={(e) => setData('title', e.target.value)}
                                         placeholder="Enter Title"
                                     />
-                                    <InputError message={errors.title} />
+                                    <InputError message={errors.title}/>
                                 </div>
                                 <div className="w-full md:w-1/2 px-3">
                                     <label
@@ -77,17 +76,30 @@ export default function PostCreate() {
                                         Slug
                                     </label>
                                     <Input
-                                        id="title"
-                                        type="title"
+                                        id="slug"
+                                        type="text"
                                         required
                                         autoFocus
                                         tabIndex={1}
-                                        autoComplete="title"
-                                        value={data.title}
-                                        onChange={(e) => setData('title', e.target.value)}
-                                        placeholder="Enter Title"
+                                        autoComplete="slug"
+                                        value={data.slug}
+                                        onChange={(e) => setData('slug', e.target.value)}
+                                        placeholder="Enter Slug"
                                     />
-                                    <InputError message={errors.title} />
+                                    <InputError message={errors.title}/>
+                                </div>
+
+                                <div className="w-full mt-5 px-3">
+                                    <label
+                                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                        htmlFor="grid-last-name">
+                                        Image
+                                    </label>
+                                    <Input
+                                        id="image"
+                                        type="file"
+                                    />
+                                    <InputError message={errors.image}/>
                                 </div>
 
                                 <div className="w-full mt-5 px-3">
@@ -96,25 +108,17 @@ export default function PostCreate() {
                                         htmlFor="grid-last-name">
                                         Content
                                     </label>
-                                    <Input
-                                        id="title"
-                                        type="title"
-                                        required
-                                        autoFocus
-                                        tabIndex={1}
-                                        autoComplete="title"
-                                        value={data.title}
-                                        onChange={(e) => setData('title', e.target.value)}
-                                        placeholder="Enter Title"
-                                    />
-                                    <InputError message={errors.title} />
+                                    <Textarea placeholder="Enter Content">
+                                    </Textarea>
+
+                                    <InputError message={errors.content}/>
                                 </div>
 
                             </div>
 
                             <div className="px-3">
                                 <Button type="submit" className="mt-2 w-24" tabIndex={4} disabled={processing}>
-                                    {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                                    {processing && <LoaderCircle className="h-4 w-4 animate-spin"/>}
                                     Create
                                 </Button>
                             </div>
